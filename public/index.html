@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
+    <script src="scripts.js"></script>
+    <title>TST Clicker | Connexion</title>
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.admin-access-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.admin-access-btn:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+
+
+.login-block {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+	
+    width: 350px;
+}
+.login-block h1 {
+    font-family: 'Exo', sans-serif;
+    font-size: 28px;
+    text-align: center;
+	
+    margin-bottom: 20px;
+}
+
+.login-block h2 {
+    font-family: 'Exo', sans-serif;
+    font-size: 24px;
+    text-align: center;
+	
+    margin-bottom: 20px;
+}
+
+.login-block form {
+    margin-top: 20px;
+}
+
+.login-block label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.login-block input[type="text"],
+.login-block input[type="password"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+	
+    border-radius: 5px;
+}
+
+.login-block input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+	
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+	
+}
+
+.quiz {
+	background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 500px;
+}
+
+.quiz h1 {
+    font-family: 'Exo', sans-serif;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-block input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+
+</style>
+<body>
+    
+    <div class="container">
+	
+        <div class="login-block">
+		<h1>The TST Clicker Game</h1>
+            <h2>Connexion</h2>
+            
+            <form id="loginForm" action="/login" method="post">
+                <label for="username">Utilisateur:</label>
+                <input type="text" id="username" name="username" required>
+                <br>
+                <label for="password">Mot de passe:</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <input type="submit" value="Se connecter">
+            </form>
+            <div id="error-message" style="color:red;"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        window.location.href = '/hub';
+                    } else if (response.status === 401) {
+                        document.getElementById('error-message').textContent = 'Identifiant ou mot de passe incorrect';
+                    } else {
+                        document.getElementById('error-message').textContent = 'Erreur lors de la connexion';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('error-message').textContent = 'Erreur lors de la connexion';
+                    console.error('Erreur:', error);
+                });
+            } else {
+                document.getElementById('error-message').textContent = 'Veuillez remplir tous les champs';
+            }
+        });
+    </script>
+</body>
+</html>
